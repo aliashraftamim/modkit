@@ -1,0 +1,30 @@
+{
+  "name": "modkit",
+  "version": "1.0.1",
+  "description": "CLI tool to generate boilerplate module files structure",
+  "main": "dist/bin/modkit.js",
+  "bin": {
+    "modkit": "./dist/bin/modkit.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node bin/modkit.ts"
+  },
+  "keywords": [
+    "cli",
+    "typescript",
+    "scaffolding",
+    "nodejs",
+    "module-generator",
+    "boilerplate",
+    "developer-tools"
+  ],
+  "author": "Your Name <your@email.com>",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/node": "^20.4.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.3"
+  }
+}
