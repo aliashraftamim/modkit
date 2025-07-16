@@ -1,6 +1,7 @@
 {
   "name": "modkit",
   "version": "1.0.1",
+  "license": "MIT",
   "description": "CLI tool to generate boilerplate module files structure",
   "main": "dist/bin/modkit.js",
   "bin": {
