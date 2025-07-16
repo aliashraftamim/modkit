@@ -21,6 +21,7 @@
     "developer-tools"
   ],
   "author": "Your Name <your@email.com>",
+
   "type": "commonjs",
   "devDependencies": {
     "@types/node": "^20.4.2",
