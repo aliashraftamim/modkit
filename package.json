@@ -1,7 +1,7 @@
 {
   "name": "modkit",
-  "version": "1.0.1",
-  "license": "MIT",
+  "version": "1.0.2",
+  "license": "ISC",
   "description": "CLI tool to generate boilerplate module files structure",
   "main": "dist/bin/modkit.js",
   "bin": {
@@ -21,7 +21,6 @@
     "developer-tools"
   ],
   "author": "Your Name <your@email.com>",
-  "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
     "@types/node": "^20.4.2",
