@@ -4,12 +4,11 @@
   "license": "ISC",
   "description": "CLI tool to generate boilerplate module files structure",
   "main": "dist/bin/modkit.js",
-  "bin": {
-    "modkit": "./dist/bin/modkit.js"
-  },
+  "bin": "./dist/bin/modkit.js",
   "scripts": {
     "build": "tsc",
-    "start": "ts-node bin/modkit.ts"
+    "start": "ts-node bin/modkit.ts",
+    "postbuild": "cpx \"bin/templates/**/*\" dist/bin/templates"
   },
   "keywords": [
     "cli",
@@ -23,8 +22,16 @@
   "author": "Your Name <your@email.com>",
   "type": "commonjs",
   "devDependencies": {
-    "@types/node": "^20.4.2",
+    "@types/express": "^5",
+    "@types/node": "^24.0.15",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.3"
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "cpx": "^1.5.0",
+    "express": "^5.1.0",
+    "http-status": "^2.1.0",
+    "mongoose": "^8.16.4",
+    "zod": "^4.0.5"
   }
 }
