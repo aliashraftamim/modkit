@@ -127,7 +127,7 @@ router.get("/:id", __CAMEL___controller.get__PASCAL__ById);
 router.patch("/:id", __CAMEL___controller.update__PASCAL__);
 router.delete("/:id", __CAMEL___controller.softDelete__PASCAL__);
 
-export const __CAMEL__route = router;
+export const __CAMEL__Route = router;
 `,
     service: `import mongoose from "mongoose";
 import { I__PASCAL__ } from "./__NAME__.interface";
