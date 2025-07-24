@@ -98,7 +98,7 @@ export const __CAMEL___controller = {
   image: string;
   content: string;
 
-  status: "active" | "inactive" | "archived" | "pending;
+  status: "active" | "inactive" | "archived" | "pending";
   isDeleted?: boolean;
 }
 `,
@@ -131,13 +131,13 @@ import { __CAMEL___controller } from "./__NAME__.controller";
 const router = Router();
 
 router.post("/", 
-auth(USER_ROLE.USER),  upload.single("image") ,   validateRequest( __CAMEL___Validation.create__CAMEL___),  AwsUploadSingle("image"),  __CAMEL___controller.create__PASCAL__);
+auth(USER_ROLE.USER),  upload.single("image") ,   validateRequest( __CAMEL___Validation.create__PASCAL__),  AwsUploadSingle("image"),  __CAMEL___controller.create__PASCAL__);
 
 router.get("/", __CAMEL___controller.getAll__PASCAL__);
 
 router.get("/:id", __CAMEL___controller.get__PASCAL__ById);
 
-router.put("/:id", auth(USER_ROLE.USER),  upload.single("image") ,   validateRequest( __CAMEL___Validation.update__CAMEL___),  AwsUploadSingle("image"), __CAMEL___controller.update__PASCAL__);
+router.put("/:id", auth(USER_ROLE.USER),  upload.single("image") ,   validateRequest( __CAMEL___Validation.update__PASCAL__),  AwsUploadSingle("image"), __CAMEL___controller.update__PASCAL__);
 
 router.delete("/:id", __CAMEL___controller.softDelete__PASCAL__);
 
@@ -145,21 +145,21 @@ export const __CAMEL__Route = router;
 `,
     service: `import mongoose from "mongoose";
 import { I__PASCAL__ } from "./__NAME__.interface";
-import { __PASCAL__Model } from "./__NAME__.model";
+import { __PASCAL__ } from "./__NAME__.model";
 
 const create__PASCAL__ = async (payload: I__PASCAL__) => {
-  return await __PASCAL__Model.create(payload);
+  return await __PASCAL__.create(payload);
 };
 
 const getAll__PASCAL__ = async () => {
-  return await __PASCAL__Model.find({ isDeleted: { $ne: true } });
+  return await __PASCAL__.find({ isDeleted: { $ne: true } });
 };
 
 const get__PASCAL__ById = async (id: string) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new Error("Invalid ID");
   }
-  return await __PASCAL__Model.findOne({ _id: id, isDeleted: { $ne: true } });
+  return await __PASCAL__.findOne({ _id: id, isDeleted: { $ne: true } });
 };
 
 const update__PASCAL__ = async (
@@ -169,14 +169,14 @@ const update__PASCAL__ = async (
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new Error("Invalid ID");
   }
-  return await __PASCAL__Model.findByIdAndUpdate(id, updateData, { new: true });
+  return await __PASCAL__.findByIdAndUpdate(id, updateData, { new: true });
 };
 
 const softDelete__PASCAL__ = async (id: string) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new Error("Invalid ID");
   }
-  return await __PASCAL__Model.findByIdAndUpdate(
+  return await __PASCAL__.findByIdAndUpdate(
     id,
     { isDeleted: true },
     { new: true }
@@ -195,9 +195,9 @@ export const __CAMEL__Service = {
 
 const create__PASCAL__ = z.object({
   body: z.object({
-  title: z.string().min(1, "Title is required"),
-  content: z.string().min(1, "Content is required"),
-  status: z.enum(["active", "inactive", "archived", "pending"]).optional  
+    title: z.string().min(1, "Title is required"),
+    content: z.string().min(1, "Content is required"),
+    status: z.enum(["active", "inactive", "archived", "pending"]).optional  
   }).strict(),
 });
 
