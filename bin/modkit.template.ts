@@ -1,4 +1,81 @@
 export const dynamicTemplates: Record<string, string> = {
+  route: `import { Router } from "express";
+import { __CAMEL___controller } from "./__NAME__.controller";
+
+const router = Router();
+
+router.post("/", 
+auth(USER_ROLE.USER),  upload.single("image") ,   validateRequest( __CAMEL___Validation.create__PASCAL__),  AwsUploadSingle("image"),  __CAMEL___controller.create__PASCAL__);
+
+router.get("/", __CAMEL___controller.getAll__PASCAL__);
+
+router.get("/:id", __CAMEL___controller.get__PASCAL__ById);
+
+router.put("/:id", auth(USER_ROLE.USER),  upload.single("image") ,   validateRequest( __CAMEL___Validation.update__PASCAL__),  AwsUploadSingle("image"), __CAMEL___controller.update__PASCAL__);
+
+router.delete("/:id", __CAMEL___controller.softDelete__PASCAL__);
+
+export const __CAMEL__Route = router;
+`,
+
+  interface: `export interface I__PASCAL__ {
+  title: string;
+  image: string;
+  content: string;
+
+  status: "active" | "inactive" | "archived" | "pending";
+  isDeleted?: boolean;
+}
+`,
+
+  validation: `import z from "zod";
+
+const create__PASCAL__ = z.object({
+  body: z.object({
+    title: z.string().min(1, "Title is required"),
+    content: z.string().min(1, "Content is required"),
+    status: z.enum(["active", "inactive", "archived", "pending"]).optional  
+  }).strict(),
+});
+
+const update__PASCAL__ = z.object({
+  body: z.object({
+    title: z.string().min(1, "Title is required").optional(),
+    content: z.string().min(1, "Content is required").optional(),
+    status: z.enum(["active", "inactive", "archived", "pending"]).optional(),
+  }).strict(),
+});
+
+export const __CAMEL__Validation = {
+  create__PASCAL__,
+  update__PASCAL__,
+};
+`,
+
+  model: `import mongoose, { Schema } from "mongoose";
+import { I__PASCAL__ } from "./__NAME__.interface";
+
+const __PASCAL__Schema = new Schema<I__PASCAL__>(
+  {
+    title: { type: String, required: true },
+    image: { type: String, required: true },  
+    content: { type: String, required: true },
+    status: {
+      type: String,
+      enum: ["active", "inactive", "archived", "pending"],
+      default: "active",
+    },
+    isDeleted: { type: Boolean, default: false },
+  },
+  { timestamps: true }
+);
+
+export const __PASCAL__ = mongoose.model<I__PASCAL__>(
+  "__PASCAL__",
+  __PASCAL__Schema
+);
+`,
+
   controller: `/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from "express";
 import httpStatus from "http-status";
@@ -15,7 +92,7 @@ const create__PASCAL__ = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAll__PASCAL__ = catchAsync(async (req: Request, res: Response) => {
-  const result = await __CAMEL__Service.getAll__PASCAL__();
+  const result = await __CAMEL__Service.getAll__PASCAL__(req.query);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -91,59 +168,6 @@ export const __CAMEL___controller = {
 };
 `,
 
-  interface: `export interface I__PASCAL__ {
-  title: string;
-  image: string;
-  content: string;
-
-  status: "active" | "inactive" | "archived" | "pending";
-  isDeleted?: boolean;
-}
-`,
-
-  model: `import mongoose, { Schema } from "mongoose";
-import { I__PASCAL__ } from "./__NAME__.interface";
-
-const __PASCAL__Schema = new Schema<I__PASCAL__>(
-  {
-    title: { type: String, required: true },
-    image: { type: String, required: true },  
-    content: { type: String, required: true },
-    status: {
-      type: String,
-      enum: ["active", "inactive", "archived", "pending"],
-      default: "active",
-    },
-    isDeleted: { type: Boolean, default: false },
-  },
-  { timestamps: true }
-);
-
-export const __PASCAL__ = mongoose.model<I__PASCAL__>(
-  "__PASCAL__",
-  __PASCAL__Schema
-);
-`,
-
-  route: `import { Router } from "express";
-import { __CAMEL___controller } from "./__NAME__.controller";
-
-const router = Router();
-
-router.post("/", 
-auth(USER_ROLE.USER),  upload.single("image") ,   validateRequest( __CAMEL___Validation.create__PASCAL__),  AwsUploadSingle("image"),  __CAMEL___controller.create__PASCAL__);
-
-router.get("/", __CAMEL___controller.getAll__PASCAL__);
-
-router.get("/:id", __CAMEL___controller.get__PASCAL__ById);
-
-router.put("/:id", auth(USER_ROLE.USER),  upload.single("image") ,   validateRequest( __CAMEL___Validation.update__PASCAL__),  AwsUploadSingle("image"), __CAMEL___controller.update__PASCAL__);
-
-router.delete("/:id", __CAMEL___controller.softDelete__PASCAL__);
-
-export const __CAMEL__Route = router;
-`,
-
   service: `import mongoose from "mongoose";
 import { I__PASCAL__ } from "./__NAME__.interface";
 import { __PASCAL__ } from "./__NAME__.model";
@@ -152,8 +176,23 @@ const create__PASCAL__ = async (payload: I__PASCAL__) => {
   return await __PASCAL__.create(payload);
 };
 
-const getAll__PASCAL__ = async () => {
-  return await __PASCAL__.find({ isDeleted: { $ne: true } });
+const getAll__PASCAL__ = async (query: Record<string, any>) => {
+
+  const __CAMEL__Query = new QueryBuilder(
+    __PASCAL__.find({
+       isDeleted: { $ne: true },
+    }),
+    query
+  )
+    .search([])
+    .sort()
+    .paginate()
+    .fields();
+
+  const meta = await __CAMEL__Query.countTotal();
+  const data = await __CAMEL__Query.modelQuery;
+
+  return { meta, data };
 };
 
 const get__PASCAL__ById = async (id: string) => {
@@ -190,30 +229,6 @@ export const __CAMEL__Service = {
   get__PASCAL__ById,
   update__PASCAL__,
   softDelete__PASCAL__,
-};
-`,
-
-  validation: `import z from "zod";
-
-const create__PASCAL__ = z.object({
-  body: z.object({
-    title: z.string().min(1, "Title is required"),
-    content: z.string().min(1, "Content is required"),
-    status: z.enum(["active", "inactive", "archived", "pending"]).optional  
-  }).strict(),
-});
-
-const update__PASCAL__ = z.object({
-  body: z.object({
-    title: z.string().min(1, "Title is required").optional(),
-    content: z.string().min(1, "Content is required").optional(),
-    status: z.enum(["active", "inactive", "archived", "pending"]).optional(),
-  }).strict(),
-});
-
-export const __CAMEL__Validation = {
-  create__PASCAL__,
-  update__PASCAL__,
 };
 `,
 };
