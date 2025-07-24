@@ -5,7 +5,6 @@ exports.dynamicTemplates = {
     controller: `/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from "express";
 import httpStatus from "http-status";
-import { catchAsync, sendResponse } from "../utils/utils";
 import { __CAMEL__Service } from "./__NAME__.service";
 
 const create__PASCAL__ = catchAsync(async (req: Request, res: Response) => {
@@ -95,9 +94,11 @@ export const __CAMEL___controller = {
 };
 `,
     interface: `export interface I__PASCAL__ {
-  id: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  title: string;
+  image: string;
+  content: string;
+
+  status: "active" | "inactive" | "archived" | "pending;
   isDeleted?: boolean;
 }
 `,
@@ -106,12 +107,20 @@ import { I__PASCAL__ } from "./__NAME__.interface";
 
 const __PASCAL__Schema = new Schema<I__PASCAL__>(
   {
+    title: { type: String, required: true },
+    image: { type: String, required: true },  
+    content: { type: String, required: true },
+    status: {
+      type: String,
+      enum: ["active", "inactive", "archived", "pending"],
+      default: "active",
+    },
     isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
 
-export const __PASCAL__Model = mongoose.model<I__PASCAL__>(
+export const __PASCAL__ = mongoose.model<I__PASCAL__>(
   "__PASCAL__",
   __PASCAL__Schema
 );
@@ -121,10 +130,15 @@ import { __CAMEL___controller } from "./__NAME__.controller";
 
 const router = Router();
 
-router.post("/", __CAMEL___controller.create__PASCAL__);
+router.post("/", 
+auth(USER_ROLE.USER),  upload.single("image") ,   validateRequest( __CAMEL___Validation.create__CAMEL___),  AwsUploadSingle("image"),  __CAMEL___controller.create__PASCAL__);
+
 router.get("/", __CAMEL___controller.getAll__PASCAL__);
+
 router.get("/:id", __CAMEL___controller.get__PASCAL__ById);
-router.patch("/:id", __CAMEL___controller.update__PASCAL__);
+
+router.put("/:id", auth(USER_ROLE.USER),  upload.single("image") ,   validateRequest( __CAMEL___Validation.update__CAMEL___),  AwsUploadSingle("image"), __CAMEL___controller.update__PASCAL__);
+
 router.delete("/:id", __CAMEL___controller.softDelete__PASCAL__);
 
 export const __CAMEL__Route = router;
@@ -180,11 +194,19 @@ export const __CAMEL__Service = {
     validation: `import z from "zod";
 
 const create__PASCAL__ = z.object({
-  body: z.object({}).strict(),
+  body: z.object({
+  title: z.string().min(1, "Title is required"),
+  content: z.string().min(1, "Content is required"),
+  status: z.enum(["active", "inactive", "archived", "pending"]).optional  
+  }).strict(),
 });
 
 const update__PASCAL__ = z.object({
-  body: z.object({}).strict(),
+  body: z.object({
+    title: z.string().min(1, "Title is required").optional(),
+    content: z.string().min(1, "Content is required").optional(),
+    status: z.enum(["active", "inactive", "archived", "pending"]).optional(),
+  }).strict(),
 });
 
 export const __CAMEL__Validation = {

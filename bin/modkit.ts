@@ -17,23 +17,30 @@ const toCamelCase = (str: string) => {
   return pascal.charAt(0).toLowerCase() + pascal.slice(1);
 };
 
-// Input path
-const inputPath = process.argv[2];
-if (!inputPath) {
+// Default base path: src/app/modules
+const defaultBasePath = path.resolve("src/app/modules");
+
+// Get input argument: module name or full path
+const inputArg = process.argv[2];
+
+if (!inputArg) {
   console.error(
-    "\u274C Folder path is required!\nUsage: modkit <absolute/path/to/folder>"
+    "\u274C Module name or path is required!\nUsage: modkit <module-name> OR <absolute/path/to/folder>"
   );
   process.exit(1);
 }
 
-const folderPath = path.resolve(inputPath);
+// Resolve folder path
+const folderPath = path.isAbsolute(inputArg)
+  ? path.resolve(inputArg)
+  : path.join(defaultBasePath, inputArg);
+
 const name = path.basename(folderPath); // module name
 
+// Create folder if not exists
 if (!fs.existsSync(folderPath)) {
   fs.mkdirSync(folderPath, { recursive: true });
 }
-
-// Import templates
 
 // Replace placeholders in template string
 function generateFromTemplate(template: string, name: string) {
@@ -53,4 +60,4 @@ Object.entries(dynamicTemplates).forEach(([type, template]) => {
   fs.writeFileSync(filePath, content);
 });
 
-console.log(`\u2705 '${inputPath}' module created with dynamic templates.`);
+console.log(`\u2705 Module '${name}' created at: ${folderPath}`);
