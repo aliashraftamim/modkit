@@ -5,13 +5,13 @@ import { __CAMEL___controller } from "./__NAME__.controller";
 const router = Router();
 
 router.post("/", 
-auth(USER_ROLE.USER),  upload.single("image") ,   validateRequest( __CAMEL___Validation.create__PASCAL__),  AwsUploadSingle("image"),  __CAMEL___controller.create__PASCAL__);
+auth(USER_ROLE.USER),  upload.single("image") ,   validateRequest( __CAMEL__Validation.create__PASCAL__),  AwsUploadSingle("image"),  __CAMEL___controller.create__PASCAL__);
 
 router.get("/", __CAMEL___controller.getAll__PASCAL__);
 
 router.get("/:id", __CAMEL___controller.get__PASCAL__ById);
 
-router.put("/:id", auth(USER_ROLE.USER),  upload.single("image") ,   validateRequest( __CAMEL___Validation.update__PASCAL__),  AwsUploadSingle("image"), __CAMEL___controller.update__PASCAL__);
+router.put("/:id", auth(USER_ROLE.USER),  upload.single("image") ,   validateRequest( __CAMEL__Validation.update__PASCAL__),  AwsUploadSingle("image"), __CAMEL__Controller.update__PASCAL__);
 
 router.delete("/:id", __CAMEL___controller.softDelete__PASCAL__);
 
@@ -34,7 +34,7 @@ const create__PASCAL__ = z.object({
   body: z.object({
     title: z.string().min(1, "Title is required"),
     content: z.string().min(1, "Content is required"),
-    status: z.enum(["active", "inactive", "archived", "pending"]).optional  
+    status: z.enum(["active", "inactive", "archived", "pending"]).optional()  
   }).strict(),
 });
 
@@ -159,7 +159,7 @@ const softDelete__PASCAL__ = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const __CAMEL___controller = {
+export const __CAMEL__Controller = {
   create__PASCAL__,
   getAll__PASCAL__,
   get__PASCAL__ById,
