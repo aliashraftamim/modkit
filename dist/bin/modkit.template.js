@@ -4,21 +4,22 @@ exports.dynamicTemplates = void 0;
 exports.dynamicTemplates = {
     route: `import { Router } from "express";
 import { __CAMEL___controller } from "./__NAME__.controller";
+import { __CAMEL__validation } from "./__NAME__.validation";
 
 const router = Router();
 
 router.post("/", 
-auth(USER_ROLE.USER),  upload.single("image") ,   validateRequest( __CAMEL__Validation.create__PASCAL__),  AwsUploadSingle("image"),  __CAMEL___controller.create__PASCAL__);
+auth(USER_ROLE.USER),  upload.single("image") ,   validateRequest( __CAMEL___validation.create__PASCAL__),  AwsUploadSingle("image"),  __CAMEL___controller.create__PASCAL__);
 
 router.get("/", __CAMEL___controller.getAll__PASCAL__);
 
 router.get("/:id", __CAMEL___controller.get__PASCAL__ById);
 
-router.put("/:id", auth(USER_ROLE.USER),  upload.single("image") ,   validateRequest( __CAMEL__Validation.update__PASCAL__),  AwsUploadSingle("image"), __CAMEL__Controller.update__PASCAL__);
+router.put("/:id", auth(USER_ROLE.USER),  upload.single("image") ,   validateRequest( __CAMEL___validation.update__PASCAL__),  AwsUploadSingle("image"), __CAMEL__Controller.update__PASCAL__);
 
 router.delete("/:id", __CAMEL___controller.softDelete__PASCAL__);
 
-export const __CAMEL__Route = router;
+export const __CAMEL___route = router;
 `,
     interface: `export interface I__PASCAL__ {
   title: string;
@@ -47,7 +48,7 @@ const update__PASCAL__ = z.object({
   }).strict(),
 });
 
-export const __CAMEL__Validation = {
+export const __CAMEL___validation = {
   create__PASCAL__,
   update__PASCAL__,
 };
@@ -78,10 +79,10 @@ export const __PASCAL__ = mongoose.model<I__PASCAL__>(
     controller: `/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from "express";
 import httpStatus from "http-status";
-import { __CAMEL__Service } from "./__NAME__.service";
+import { __CAMEL___service } from "./__NAME__.service";
 
 const create__PASCAL__ = catchAsync(async (req: Request, res: Response) => {
-  const result = await __CAMEL__Service.create__PASCAL__(req.body);
+  const result = await __CAMEL___service.create__PASCAL__(req.body);
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
     success: true,
@@ -91,7 +92,7 @@ const create__PASCAL__ = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAll__PASCAL__ = catchAsync(async (req: Request, res: Response) => {
-  const result = await __CAMEL__Service.getAll__PASCAL__(req.query);
+  const result = await __CAMEL___service.getAll__PASCAL__(req.query);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -102,7 +103,7 @@ const getAll__PASCAL__ = catchAsync(async (req: Request, res: Response) => {
 
 const get__PASCAL__ById = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await __CAMEL__Service.get__PASCAL__ById(id);
+  const result = await __CAMEL___service.get__PASCAL__ById(id);
   if (!result) {
     return sendResponse(res, {
       statusCode: httpStatus.NOT_FOUND,
@@ -122,7 +123,7 @@ const get__PASCAL__ById = catchAsync(async (req: Request, res: Response) => {
 const update__PASCAL__ = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const updateData = req.body;
-  const result = await __CAMEL__Service.update__PASCAL__(id, updateData);
+  const result = await __CAMEL___service.update__PASCAL__(id, updateData);
   if (!result) {
     return sendResponse(res, {
       statusCode: httpStatus.NOT_FOUND,
@@ -141,7 +142,7 @@ const update__PASCAL__ = catchAsync(async (req: Request, res: Response) => {
 
 const softDelete__PASCAL__ = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await __CAMEL__Service.softDelete__PASCAL__(id);
+  const result = await __CAMEL___service.softDelete__PASCAL__(id);
   if (!result) {
     return sendResponse(res, {
       statusCode: httpStatus.NOT_FOUND,
@@ -158,7 +159,7 @@ const softDelete__PASCAL__ = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const __CAMEL__Controller = {
+export const __CAMEL___controller = {
   create__PASCAL__,
   getAll__PASCAL__,
   get__PASCAL__ById,
@@ -221,7 +222,7 @@ const softDelete__PASCAL__ = async (id: string) => {
   );
 };
 
-export const __CAMEL__Service = {
+export const __CAMEL___service = {
   create__PASCAL__,
   getAll__PASCAL__,
   get__PASCAL__ById,
