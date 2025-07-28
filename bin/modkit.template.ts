@@ -12,7 +12,7 @@ router.get("/", __CAMEL___controller.getAll__PASCAL__);
 
 router.get("/:id", __CAMEL___controller.get__PASCAL__ById);
 
-router.put("/:id", auth(USER_ROLE.USER),  upload.single("image") ,   validateRequest( __CAMEL___validation.update__PASCAL__),  AwsUploadSingle("image"), __CAMEL__Controller.update__PASCAL__);
+router.put("/:id", auth(USER_ROLE.USER),  upload.single("image") ,   validateRequest( __CAMEL___validation.update__PASCAL__),  AwsUploadSingle("image"), __CAMEL___controller.update__PASCAL__);
 
 router.delete("/:id", __CAMEL___controller.softDelete__PASCAL__);
 
