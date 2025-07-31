@@ -8,9 +8,9 @@ const router = Router();
 router.post("/", 
 auth(USER_ROLE.USER),  upload.single("image") ,   validateRequest( __CAMEL___validation.create__PASCAL__),  AwsUploadSingle("image"),  __CAMEL___controller.create__PASCAL__);
 
-router.get("/", __CAMEL___controller.getAll__PASCAL__);
+router.get("/", auth(USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN), __CAMEL___controller.getAll__PASCAL__);
 
-router.get("/:id", __CAMEL___controller.get__PASCAL__ById);
+router.get("/:id", auth(USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN), __CAMEL___controller.get__PASCAL__ById);
 
 router.put("/:id", auth(USER_ROLE.USER),  upload.single("image") ,   validateRequest( __CAMEL___validation.update__PASCAL__),  AwsUploadSingle("image"), __CAMEL___controller.update__PASCAL__);
 
